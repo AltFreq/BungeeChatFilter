@@ -28,6 +28,7 @@ Commands:
     - s
     - l
     - local
+    - hub
 
 #AntiSpam - Stop people from reposting the same message multiple times
 AntiSpam: true
@@ -52,6 +53,8 @@ AntiSpam: true
 #           lower:            - this will change any matches into lowercase
 
 rules:
+
+#Filters the word fuck and replaces it with a random word from the list
     swearfilter1:
         regex: (?i)(f+u+c+k+|f+u+k+|f+v+c+k+|f+u+q+)
         actions:
@@ -61,6 +64,7 @@ rules:
                 - funk
                 - fork
 
+#Filters the list of swear words below and replaces them with a random word from the list
     swearfilter2:
         regex: (?i)(cunt|whore|fag|slut|queer|bitch|bastard|dick|gay)
         actions:
@@ -69,6 +73,7 @@ rules:
                 - sweetie
                 - sexy
 
+#Filters the word nigger and denys the chat even while kicking the player and alerting the server why the player was kicked
     swearfilter3:
         regex: "n[^a]gg+(a|er|uh)"
         actions:
@@ -76,6 +81,7 @@ rules:
             alert: "{player} has been kicked for racism"
             kick: "You have been kicked for racism"
 
+#when a player asks for op they will instead say one of the following from the list and be sent a message
     askforOP:
         regex: "(?i).*give me op.*|.*can i have op.*"
         actions:
@@ -84,11 +90,13 @@ rules:
                 - I use xray!
             message: '&cPlease don''t ask for OP'
 
+#When the player uses 4 or more letters in a row all in caps lock then the message will be changed to lowercase
     CAPSPAM:
         regex: (\p{Lu}|\s){4,}
         actions:
             lower: true
 
+#Removes magic, bold and italics from the players chat when they dont have the bungeefilter.antiformatbypass permission.
     AntiFormatText:
         regex: '&[k-o]'
         permission: bungeefilter.antiformatbypass
@@ -96,6 +104,7 @@ rules:
             remove: true
             message: '&cYou do not have permission to use Format text'
 
+#Removes color from the chat unless the player has the bungeefilter.colorbypass permission
     AntiColorText:
         regex: "&[0-9 a-f]"
         permission: bungeefilter.colorbypass
@@ -103,6 +112,7 @@ rules:
             remove: true
             message: '&cYou do not have permission for colors'
 
+#Replaces all ip adresses and web addresses unless it matches the ignore list regex
     AntiAdvertising:
         regex: \b\d{1,3}+\p{P}*\d{1,3}+\p{P}*\d{1,3}+\p{P}*\d{1,3}+\b|([\w-\.]+)((?:[\w]+\.)+)([a-zA-Z]{2,4})
         ignores: minecraft.net|youtube.com|google.com
@@ -111,8 +121,10 @@ rules:
                 - minecraft.net
             message: '&cPlease do not advertise on our server'
 
+#When a player uses the command /hub they will instead cast the command /server hub. Denies the command so /hub isnt also sent
     CommandShortcut:
         regex: /hub
         actions:
             command: /server hub
+            deny: true
 

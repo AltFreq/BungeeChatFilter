@@ -55,7 +55,7 @@ public class Rule {
             } else if ( action.equals( "alert" ) ) {
                 ProxyServer.getInstance().broadcast( color( actions.get( action )[0] ).replace( "{player}", player.getDisplayName() ) );
             } else if ( action.equals( "command" ) ) {
-                player.chat( "/" + actions.get( action )[0] );
+                player.chat( actions.get( action )[0] );
             } else if ( action.equals( "remove" ) ) {
                 message = message.replaceAll( regex.pattern(), "" );
             } else if ( action.equals( "replace" ) ) {
