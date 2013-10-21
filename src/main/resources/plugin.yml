@@ -1,0 +1,4 @@
+name: BungeeChatFilter
+main : com.minecraftdimensions.bungeechatfilter.Main
+version: ${project.version}b-${build.number}
+author: Bloodsplat
