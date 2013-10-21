@@ -1,0 +1,118 @@
+Bungee Chat Filter
+
+A chat and command filter built specifically for BungeeCord servers.
+
+Special thanks to the PwnFilter team at http://dev.bukkit.org/bukkit-plugins/pwnfilter/ as I have used similar regex rules to them
+
+
+Config.yml example
+
+##########################################
+##                                      ##
+##      Bungee Chat Filter Config       ##
+##               v1                     ##
+##########################################
+
+#Monitor commands - Monitor commands send by the players as chat
+Monitor Commands: true
+
+#Commands - The list of commands that the plugin will monitor
+Commands:
+    - msg
+    - message
+    - tell
+    - whisper
+    - w
+    - g
+    - global
+    - s
+    - l
+    - local
+
+#AntiSpam - Stop people from reposting the same message multiple times
+AntiSpam: true
+
+
+#Rules - Groups of rules which monitor the chat
+#rules:
+#   rulename:  - the name of the rule
+#       regex:  - the string regex that the rule will check for
+#       ignores:  - works in replace and lower, this will ignore any matches that match this regex
+#       permission: - the permission required to bypass this rule
+#       actions: - here is the list of actions the rule will perform if matched
+#           deny: true      - this will deny the message and cancel the event
+#           message: (message)      -this will send a message (message) to the player
+#           kick: (message)     - this will kick the player with the (message)
+#           alert: (message)        - this will send a broadcast to the server {player} will be replaced with the players display name
+#           command: /(command)     - this will cause the player to send the (command)
+#           remove: true        - this will remove any matches from the players message
+#           replace:              - this will replace the matched word with a random word from the list below
+#               - word1
+#               - word2
+#           lower:            - this will change any matches into lowercase
+
+rules:
+    swearfilter1:
+        regex: (?i)(f+u+c+k+|f+u+k+|f+v+c+k+|f+u+q+)
+        actions:
+            replace:
+                - fudge
+                - frack
+                - funk
+                - fork
+
+    swearfilter2:
+        regex: (?i)(cunt|whore|fag|slut|queer|bitch|bastard|dick|gay)
+        actions:
+            replace:
+                - lovely
+                - sweetie
+                - sexy
+
+    swearfilter3:
+        regex: "n[^a]gg+(a|er|uh)"
+        actions:
+            deny: true
+            alert: "{player} has been kicked for racism"
+            kick: "You have been kicked for racism"
+
+    askforOP:
+        regex: "(?i).*give me op.*|.*can i have op.*"
+        actions:
+            replace:
+                - Can you please ban me
+                - I use xray!
+            message: '&cPlease don''t ask for OP'
+
+    CAPSPAM:
+        regex: (\p{Lu}|\s){4,}
+        actions:
+            lower: true
+
+    AntiFormatText:
+        regex: '&[k-o]'
+        permission: bungeefilter.antiformatbypass
+        actions:
+            remove: true
+            message: '&cYou do not have permission to use Format text'
+
+    AntiColorText:
+        regex: "&[0-9 a-f]"
+        permission: bungeefilter.colorbypass
+        actions:
+            remove: true
+            message: '&cYou do not have permission for colors'
+
+    AntiAdvertising:
+        regex: \b\d{1,3}+\p{P}*\d{1,3}+\p{P}*\d{1,3}+\p{P}*\d{1,3}+\b|([\w-\.]+)((?:[\w]+\.)+)([a-zA-Z]{2,4})
+        ignores: minecraft.net|youtube.com|google.com
+        actions:
+            replace:
+                - minecraft.net
+            message: '&cPlease do not advertise on our server'
+
+    CommandShortcut:
+        regex: /hub
+        actions:
+            command: /server hub
+
