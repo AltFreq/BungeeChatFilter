@@ -28,8 +28,13 @@ public class PlayerChatListener implements Listener {
                     }
                 }
                 for ( Rule r : Main.RULES ) {
-                    if ( r.hasPermission() && player.hasPermission( r.getPermission() ) ) {
-                        return;
+                    if(r.hasPermission()){
+                        if(!r.needsPerm && player.hasPermission( r.getPermission() )){
+                            return;
+                        }
+                        if(r.needsPerm && !player.hasPermission( r.getPermission() )){
+                            return;
+                        }
                     }
                     if ( r.doesMessageContainRegex( e.getMessage() ) ) {
                         r.performActions( e, player );
