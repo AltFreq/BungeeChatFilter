@@ -58,7 +58,11 @@ public class Rule {
             } else if ( action.equals( "kick" ) ) {
                 player.disconnect( color( actions.get( action )[0] ) );
             } else if ( action.equals( "alert" ) ) {
-                ProxyServer.getInstance().broadcast( color( actions.get( action )[0] ).replace( "{player}", player.getDisplayName() ).replace("{arguments}", message.split( " ", 2 )[1] ) );
+                String alert =   actions.get( action )[0].replace( "{player}", player.getDisplayName() );
+                if(message.split( " ", 2 ).length>1){
+                       alert =alert.replace("{arguments}", message.split( " ", 2 )[1] )    ;
+                }
+                ProxyServer.getInstance().broadcast( color( alert ));
             } else if ( action.equals( "scommand" ) ) {
                 player.chat( actions.get( action )[0] );
             } else if ( action.equals( "pcommand" ) ) {
@@ -76,7 +80,7 @@ public class Rule {
                     if ( !m.group().matches( ignore.pattern() ) ) {
                         int n = rand.nextInt( actions.get( action ).length );
                         sb.append( message.substring( last, m.start() ) );
-                        sb.append( color( actions.get( action )[n]) );
+                        sb.append( actions.get( action )[n] );
                         last = m.end();
                     }
                 }
