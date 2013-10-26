@@ -74,7 +74,7 @@ public class Rule {
                     if ( !m.group().matches( ignore.pattern() ) ) {
                         int n = rand.nextInt( actions.get( action ).length );
                         sb.append( message.substring( last, m.start() ) );
-                        sb.append( actions.get( action )[n] );
+                        sb.append( color( actions.get( action )[n]) );
                         last = m.end();
                     }
                 }
