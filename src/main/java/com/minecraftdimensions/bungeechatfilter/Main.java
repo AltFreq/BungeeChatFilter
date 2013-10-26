@@ -73,9 +73,18 @@ public class Main extends Plugin {
         RULES = new ArrayList<>();
         List<String> nodes = c.getSubNodes( "rules" );
         for ( String node : nodes ) {
-            String regex = c.getString( "rules." + node + ".regex" );
+            String regex = "";
+            if(c.getListString( "rules."+node+".regex" )!=null){
+                List<String> strList = c.getListString( "rules."+node+".regex" ) ;
+                for(String str:strList){
+                   regex+="str|";
+                }
+                regex = regex.substring( 0,regex.length()-1 );
+            }else{
+             regex = c.getString( "rules." + node + ".regex" );
+            }
             String perm = c.getString( "rules." + node + ".permission" );
-            String ignore = c.getString( "rules." + node + ".ignore" );
+            String ignore = c.getString( "rules." + node + ".ignores" );
             HashMap<String, String[]> actions = new HashMap<>();
             for ( String action : c.getSubNodes( "rules." + node + ".actions" ) ) {
                 if ( action.equals( "replace" ) ) {
