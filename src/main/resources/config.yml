@@ -112,9 +112,24 @@ rules:
                 - minecraft.net
             message: '&cPlease do not advertise on our server'
 
-#When a player uses the command /hub they will instead cast the command /server hub. Denies the command so /hub isnt also sent
+#When a player uses the command /hub they will instead cast the command /server hub to the proxy. Denies the command so /hub isnt also sent
     CommandShortcut:
         regex: /hub
         actions:
-            command: /server hub
+            pcommand: /server hub
+            deny: true
+
+#When a player uses the command /shop they will instead send a command to the server they are on /warp shop.
+    CommandShortcut2:
+        regex: /shop
+        actions:
+            scommand: /warp shop
+            deny: true
+
+#Creates a proxywide broadcast command !bungeefilter.broadcast means the player needs the permission for the check to work
+    CreateCommand:
+        regex: /broadcast
+        permission: "!bungeefilter.broadcast"
+        actions:
+            alert: '&5[Broadcast]&a{player}&f:{arguments}'
             deny: true
