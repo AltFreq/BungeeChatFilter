@@ -55,9 +55,19 @@ rules:
                 - funk
                 - fork
 
-#Filters the list of swear words below and replaces them with a random word from the list
+#Filters the list of swear words below and replaces them with a random word from the list. Uses a list as the regex
+#The first item has (?i)(cunt to make the generated regex case insensitive.
     swearfilter2:
         regex: (?i)(cunt|whore|fag|slut|queer|bitch|bastard|dick|gay)
+            - (?i)(cunt
+            - whore
+            - fag
+            - slut
+            - queer
+            - bitch
+            - bastard
+            - dick
+            - gay
         actions:
             replace:
                 - lovely
@@ -71,6 +81,15 @@ rules:
             deny: true
             alert: "{player} has been kicked for racism"
             kick: "You have been kicked for racism"
+
+#Replaces the word bloodsplat with a coloured word if they have permission for colours and a chat plugin on the server that supports colors.
+    colorReplace:
+        regex: "bloodsplat"
+        actions:
+            replace:
+                - "&cBloodsplat"
+                #Will only work if the player has permission for colors on the servers chat plugin.
+
 
 #when a player asks for op they will instead say one of the following from the list and be sent a message
     askforOP:

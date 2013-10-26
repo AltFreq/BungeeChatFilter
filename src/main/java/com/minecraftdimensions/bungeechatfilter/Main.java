@@ -74,14 +74,14 @@ public class Main extends Plugin {
         List<String> nodes = c.getSubNodes( "rules" );
         for ( String node : nodes ) {
             String regex = "";
-            if(c.getListString( "rules."+node+".regex" )!=null){
                 List<String> strList = c.getListString( "rules."+node+".regex" ) ;
                 for(String str:strList){
-                   regex+="str|";
+                   regex+=str+"|";
                 }
-                regex = regex.substring( 0,regex.length()-1 );
-            }else{
+            if(regex.length()==0){
              regex = c.getString( "rules." + node + ".regex" );
+            }     else{
+                regex = regex.substring( 0,regex.length()-1 );
             }
             String perm = c.getString( "rules." + node + ".permission" );
             String ignore = c.getString( "rules." + node + ".ignores" );
