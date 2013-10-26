@@ -16,6 +16,7 @@ public class Rule {
     Pattern ignore;
     HashMap<String, String[]> actions;
     String permission = null;
+    boolean needsPerm;
 
     public Rule( String regex, HashMap<String, String[]> actions, String permission, String ignores ) {
         this.regex = Pattern.compile( regex );
@@ -24,6 +25,10 @@ public class Rule {
         }
         this.ignore = Pattern.compile( ignores );
         this.actions = actions;
+        if(permission!=null && permission.startsWith( "!" )){
+            permission = permission.substring( 1,permission.length() );
+            needsPerm = true;
+        }
         this.permission = permission;
     }
 
@@ -53,9 +58,11 @@ public class Rule {
             } else if ( action.equals( "kick" ) ) {
                 player.disconnect( color( actions.get( action )[0] ) );
             } else if ( action.equals( "alert" ) ) {
-                ProxyServer.getInstance().broadcast( color( actions.get( action )[0] ).replace( "{player}", player.getDisplayName() ) );
-            } else if ( action.equals( "command" ) ) {
+                ProxyServer.getInstance().broadcast( color( actions.get( action )[0] ).replace( "{player}", player.getDisplayName() ).replace("{arguments}", message.split( " ", 2 )[1] ) );
+            } else if ( action.equals( "scommand" ) ) {
                 player.chat( actions.get( action )[0] );
+            } else if ( action.equals( "pcommand" ) ) {
+                ProxyServer.getInstance().getPluginManager().dispatchCommand( player, actions.get( action )[0] );
             } else if ( action.equals( "remove" ) ) {
                 message = message.replaceAll( regex.pattern(), "" );
             } else if ( action.equals( "replace" ) ) {
@@ -97,6 +104,10 @@ public class Rule {
 
     public boolean hasPermission() {
         return permission != null;
+    }
+
+    public boolean needsPermission(){
+        return needsPerm;
     }
 
     public String getPermission() {
