@@ -63,6 +63,8 @@ public class Rule {
                 player.chat( actions.get( action )[0] );
             } else if ( action.equals( "pcommand" ) ) {
                 ProxyServer.getInstance().getPluginManager().dispatchCommand( player, actions.get( action )[0] );
+            } else if( action.equals( "ccommand" )){
+                ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), actions.get( action )[0] );
             } else if ( action.equals( "remove" ) ) {
                 message = message.replaceAll( regex.pattern(), "" );
             } else if ( action.equals( "replace" ) ) {
