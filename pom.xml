@@ -13,7 +13,8 @@
     <url>http://www.spigotmc.org/resources/bungeesuite.9/</url>
 
     <properties>
-        <build.number>${BUILD_NUMBER}</build.number>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--<build.number></build.number>-->
     </properties>
 
 
