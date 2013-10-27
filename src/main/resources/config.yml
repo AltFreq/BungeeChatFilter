@@ -58,7 +58,7 @@ rules:
 #Filters the list of swear words below and replaces them with a random word from the list. Uses a list as the regex
 #The first item has (?i)(cunt to make the generated regex case insensitive.
     swearfilter2:
-        regex: (?i)(cunt|whore|fag|slut|queer|bitch|bastard|dick|gay)
+        regex:
             - (?i)(cunt
             - whore
             - fag
@@ -125,7 +125,7 @@ rules:
 #Replaces all ip adresses and web addresses unless it matches the ignore list regex
     AntiAdvertising:
         regex: \b\d{1,3}+\p{P}*\d{1,3}+\p{P}*\d{1,3}+\p{P}*\d{1,3}+\b|([\w-\.]+)((?:[\w]+\.)+)([a-zA-Z]{2,4})
-        ignores: minecraft.net|youtube.com|google.com
+        ignores: (w{3}\.)?(minecraftdimensions\.com)(/\w*)*|(w{3}\.)?(google\.com)(/\w*)*|(w{3}\.)?(youtube\.com)(/\w*)*
         actions:
             replace:
                 - minecraft.net
