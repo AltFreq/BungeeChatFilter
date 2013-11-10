@@ -89,6 +89,16 @@ public class Config {
         }
 
     }
+    public int getInt( String key ) {
+
+        if ( fconfig.contains( key ) ) {
+            return fconfig.getInt( key );
+        } else {
+            return 0;
+        }
+
+    }
+
 
     public boolean getBoolean( String key, boolean def ) {
 
