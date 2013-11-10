@@ -12,10 +12,11 @@ import java.util.List;
 
 public class Main extends Plugin {
 
+    public static long SPAMTIMER = 0;
     public static Boolean COMMANDS;
     public static List<String> COMLIST;
     public static ArrayList<Rule> RULES;
-    public static HashMap<ProxiedPlayer, String> ANTISPAM = new HashMap<>();
+    public static HashMap<ProxiedPlayer, Long> ANTISPAM = new HashMap<>();
     public static boolean NOSPAM;
     public static Config c;
 
@@ -66,6 +67,7 @@ public class Main extends Plugin {
         defaultList.add( "msg" );
         COMLIST = c.getListString( "Commands", defaultList );
         NOSPAM = c.getBoolean( "AntiSpam", true );
+        SPAMTIMER = c.getInt( "Minimum-Chat-Delay" ) ;
         loadRules();
     }
 
