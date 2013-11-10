@@ -49,7 +49,11 @@ public class Rule {
     }
 
     public void performActions( ChatEvent event, ProxiedPlayer player ) {
+
         String message = event.getMessage();
+        if(message.matches( ignore.pattern() )){
+            return;
+        }
         for ( String action : actions.keySet() ) {
             if ( action.equals( "deny" ) ) {
                 event.setCancelled( true );
@@ -77,12 +81,10 @@ public class Rule {
                 StringBuilder sb = new StringBuilder();
                 int last = 0;
                 while ( m.find() ) {
-                    if ( !m.group().matches( ignore.pattern() ) ) {
                         int n = rand.nextInt( actions.get( action ).length );
                         sb.append( message.substring( last, m.start() ) );
                         sb.append( actions.get( action )[n] );
                         last = m.end();
-                    }
                 }
                 sb.append( message.substring( last ) );
                 message = sb.toString();
@@ -91,11 +93,9 @@ public class Rule {
                 StringBuilder sb = new StringBuilder();
                 int last = 0;
                 while ( m.find() ) {
-                    if ( !m.group().matches( ignore.pattern() ) ) {
                         sb.append( message.substring( last, m.start() ) );
                         sb.append( m.group( 0 ).toLowerCase() );
                         last = m.end();
-                    }
                 }
                 sb.append( message.substring( last ) );
                 message = sb.toString();
