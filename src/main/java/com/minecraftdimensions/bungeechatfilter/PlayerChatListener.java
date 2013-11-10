@@ -3,6 +3,7 @@ package com.minecraftdimensions.bungeechatfilter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 public class PlayerChatListener implements Listener {
 
     @EventHandler
-    public void playerChat( ChatEvent e ) throws SQLException {
+    public void playerChat( ChatEvent e ) {
         if ( e.getSender() instanceof ProxiedPlayer ) {
             ProxiedPlayer player = ( ProxiedPlayer ) e.getSender();
             if ( !player.hasPermission( "bungeefilter.bypass" ) ) {
@@ -19,12 +20,12 @@ public class PlayerChatListener implements Listener {
                     return;
                 }
                 if ( Main.NOSPAM ) {
-                    if ( spamCheck( player, e.getMessage() ) ) {
+                    if ( spamCheck( player, e.getMessage(), System.currentTimeMillis()) ) {
                         e.setCancelled( true );
                         player.sendMessage( ChatColor.RED + "Please do not spam" );
                         return;
                     } else {
-                        Main.ANTISPAM.put( player, e.getMessage() );
+                        Main.ANTISPAM.put( player,System.currentTimeMillis());
                     }
                 }
                 for ( Rule r : Main.RULES ) {
@@ -45,14 +46,26 @@ public class PlayerChatListener implements Listener {
 
     }
 
-    private boolean spamCheck( ProxiedPlayer player, String message ) {
+    private boolean spamCheck( ProxiedPlayer player,String message, long time ) {
         if(isChatCommand( message ) && !isMonitoredCommand( message )){
             return false;
         }
         if ( Main.ANTISPAM.containsKey( player ) ) {
-            return Main.ANTISPAM.get( player ).equals( message );
+            System.out.println(time);
+            System.out.println(time-Main.ANTISPAM.get( player ));
+            System.out.println(Main.SPAMTIMER);
+            Long diff = time-Main.ANTISPAM.get( player );
+            return diff<Main.SPAMTIMER;
         }
         return false;
+    }
+
+    @EventHandler
+    public void playerLogOut( PlayerDisconnectEvent e ) {
+          if(Main.ANTISPAM.containsKey( e.getPlayer() )){
+              Main.ANTISPAM.remove( e.getPlayer() );
+              System.out.println("removed");
+          }
     }
 
     public boolean isChatCommand( String message ) {
