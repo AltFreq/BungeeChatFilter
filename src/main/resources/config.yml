@@ -128,14 +128,13 @@ rules:
             remove: true
             message: '&cYou do not have permission for colors'
 
-#Replaces all ip adresses and web addresses unless it matches the ignore list regex
+#Assumes all IP addresses are advertising and all URLs that do not include this server's name are advertising
     AntiAdvertising:
-        regex: \b\d{1,3}+\p{P}*\d{1,3}+\p{P}*\d{1,3}+\p{P}*\d{1,3}+\b|([\w-\.]+)((?:[\w]+\.)+)([a-zA-Z]{2,4})
-        ignores: (\w*\.)*(minecraftserver\.com)(/\w*)*|(\w*\.)*(google\.com)(/\w*)*|(\w*\.)*(youtube\.com)(/\w*)*|(puu\.sh)|(\w*)\.png|(\w*)\.jpg
+        regex: (^.*([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}).*$)|(^.*((mc|play)\.(.*)\.(com|net))|((.+)\.(.*(mine|craft).*)\.(com|net)).*$)
+        ignores: (^.*minecraftserver.*$) |(^.*minecraftserver2.*$)
         actions:
-            message: 'Please don''t advertise'
-            replace:
-                - minecraftserver.com
+            kick: '&cNo advertising other servers.'
+            deny: true
 
 #When a player uses the command /hub they will instead cast the command /server hub to the proxy. Denies the command so /hub isnt also sent
     CommandShortcut:
