@@ -160,7 +160,7 @@ rules:
             deny: true
 
 #Shortcut for website URL can use either /url or /website
-    CreateCommand:
+    CreateCommand2:
         regex: (/url)|(/website)
         actions:
             message: "&l&6[Check it out]&3 This server's website is &6www.minecraftserver.com"
