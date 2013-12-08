@@ -51,7 +51,8 @@ public class Rule {
     public void performActions( ChatEvent event, ProxiedPlayer player ) {
 
         String message = event.getMessage();
-        if(message.matches( ignore.pattern() )){
+        Matcher ig =Pattern.compile(ignore.pattern()).matcher(message);
+           while(ig.find()){
             return;
         }
         for ( String action : actions.keySet() ) {
