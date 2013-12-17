@@ -21,9 +21,10 @@ public class Rule {
     public Rule( String regex, HashMap<String, String[]> actions, String permission, String ignores ) {
         this.regex = Pattern.compile( regex );
         if ( ignores == null ) {
-            ignores = "";
-        }
+            ignore = null;
+        }    else{
         this.ignore = Pattern.compile( ignores );
+        }
         this.actions = actions;
         if(permission!=null && permission.startsWith( "!" )){
             permission = permission.substring( 1,permission.length() );
@@ -49,11 +50,13 @@ public class Rule {
     }
 
     public void performActions( ChatEvent event, ProxiedPlayer player ) {
-
+        System.out.println("Performing actions");
         String message = event.getMessage();
-        Matcher ig =Pattern.compile(ignore.pattern()).matcher(message);
-           while(ig.find()){
-            return;
+        if(ignore!=null){
+            Matcher ig =Pattern.compile(ignore.pattern()).matcher(message);
+                while(ig.find()){
+                return;
+            }
         }
         for ( String action : actions.keySet() ) {
             if ( action.equals( "deny" ) ) {

@@ -7,8 +7,6 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-import java.sql.SQLException;
-
 public class PlayerChatListener implements Listener {
 
     @EventHandler
@@ -22,7 +20,7 @@ public class PlayerChatListener implements Listener {
                 if ( Main.NOSPAM ) {
                     if ( spamCheck( player, e.getMessage(), System.currentTimeMillis()) ) {
                         e.setCancelled( true );
-                        player.sendMessage( ChatColor.RED + "Please do not spam" );
+                        player.sendMessage(ChatColor.RED + "Please do not spam" );
                         return;
                     } else {
                         Main.ANTISPAM.put( player,System.currentTimeMillis());
@@ -51,9 +49,6 @@ public class PlayerChatListener implements Listener {
             return false;
         }
         if ( Main.ANTISPAM.containsKey( player ) ) {
-            System.out.println(time);
-            System.out.println(time-Main.ANTISPAM.get( player ));
-            System.out.println(Main.SPAMTIMER);
             Long diff = time-Main.ANTISPAM.get( player );
             return diff<Main.SPAMTIMER;
         }
@@ -64,7 +59,6 @@ public class PlayerChatListener implements Listener {
     public void playerLogOut( PlayerDisconnectEvent e ) {
           if(Main.ANTISPAM.containsKey( e.getPlayer() )){
               Main.ANTISPAM.remove( e.getPlayer() );
-              System.out.println("removed");
           }
     }
 
