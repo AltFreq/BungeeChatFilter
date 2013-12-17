@@ -50,7 +50,6 @@ public class Rule {
     }
 
     public void performActions( ChatEvent event, ProxiedPlayer player ) {
-        System.out.println("Performing actions");
         String message = event.getMessage();
         if(ignore!=null){
             Matcher ig =Pattern.compile(ignore.pattern()).matcher(message);
