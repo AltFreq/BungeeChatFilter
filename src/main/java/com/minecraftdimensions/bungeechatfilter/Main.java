@@ -2,7 +2,6 @@ package com.minecraftdimensions.bungeechatfilter;
 
 import com.minecraftdimensions.bungeechatfilter.configlibrary.Config;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.*;
@@ -16,8 +15,10 @@ public class Main extends Plugin {
     public static Boolean COMMANDS;
     public static List<String> COMLIST;
     public static ArrayList<Rule> RULES;
-    public static HashMap<ProxiedPlayer, Long> ANTISPAM = new HashMap<>();
+    public static HashMap<String, Long> ANTISPAM = new HashMap<>();
+    public static HashMap<String, String> ANTIREPEAT = new HashMap<>(  );
     public static boolean NOSPAM;
+    public static boolean NOREPEAT;
     public static Config c;
 
     public void onEnable() {
@@ -67,6 +68,7 @@ public class Main extends Plugin {
         defaultList.add( "msg" );
         COMLIST = c.getListString( "Commands", defaultList );
         NOSPAM = c.getBoolean( "AntiSpam", true );
+        NOREPEAT = c.getBoolean( "AntiRepeat", true );
         SPAMTIMER = c.getInt( "Minimum-Chat-Delay" ) ;
         loadRules();
     }

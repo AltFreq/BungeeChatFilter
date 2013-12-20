@@ -18,13 +18,23 @@ public class PlayerChatListener implements Listener {
                 if ( !Main.COMMANDS && isChatCommand( e.getMessage() ) ) {
                     return;
                 }
+                if(Main.NOREPEAT){
+                    if(repeatCheck(player.getName(), e.getMessage())){
+                        e.setCancelled( true );
+                        player.sendMessage( new TextComponent( ChatColor.RED + "Please do not spam" ) );
+                        return;
+                    }else{
+                        Main.ANTIREPEAT.put( player.getName(), e.getMessage() );
+                    }
+
+                }
                 if ( Main.NOSPAM ) {
                     if ( spamCheck( player, e.getMessage(), System.currentTimeMillis()) ) {
                         e.setCancelled( true );
                         player.sendMessage( new TextComponent( ChatColor.RED + "Please do not spam" ) );
                         return;
                     } else {
-                        Main.ANTISPAM.put( player,System.currentTimeMillis());
+                        Main.ANTISPAM.put( player.getName(),System.currentTimeMillis());
                     }
                 }
                 for ( Rule r : Main.RULES ) {
@@ -45,12 +55,22 @@ public class PlayerChatListener implements Listener {
 
     }
 
+    private boolean repeatCheck( String name, String message ) {
+        if(isChatCommand( message ) && !isMonitoredCommand( message )){
+            return false;
+        }
+        if ( Main.ANTIREPEAT.containsKey( name ) ) {
+            return !(Main.ANTIREPEAT.get( name ).equals( message ));
+        }
+        return false;
+    }
+
     private boolean spamCheck( ProxiedPlayer player,String message, long time ) {
         if(isChatCommand( message ) && !isMonitoredCommand( message )){
             return false;
         }
-        if ( Main.ANTISPAM.containsKey( player ) ) {
-            Long diff = time-Main.ANTISPAM.get( player );
+        if ( Main.ANTISPAM.containsKey( player.getName() ) ) {
+            Long diff = time-Main.ANTISPAM.get( player.getName() );
             return diff<Main.SPAMTIMER;
         }
         return false;
@@ -58,8 +78,8 @@ public class PlayerChatListener implements Listener {
 
     @EventHandler
     public void playerLogOut( PlayerDisconnectEvent e ) {
-          if(Main.ANTISPAM.containsKey( e.getPlayer() )){
-              Main.ANTISPAM.remove( e.getPlayer() );
+          if(Main.ANTISPAM.containsKey( e.getPlayer().getName() )){
+              Main.ANTISPAM.remove( e.getPlayer().getName() );
           }
     }
 
