@@ -60,7 +60,7 @@ public class PlayerChatListener implements Listener {
             return false;
         }
         if ( Main.ANTIREPEAT.containsKey( name ) ) {
-            return !(Main.ANTIREPEAT.get( name ).equals( message ));
+            return Main.ANTIREPEAT.get( name ).equals( message );
         }
         return false;
     }
