@@ -2,6 +2,7 @@ package com.minecraftdimensions.bungeechatfilter;
 
 import com.minecraftdimensions.bungeechatfilter.configlibrary.Config;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
 
 import java.util.ArrayList;
@@ -30,6 +31,6 @@ public class BFReload extends Command {
         Main.COMLIST = Main.c.getListString( "Commands", defaultList );
         Main.NOSPAM = Main.c.getBoolean( "AntiSpam", true );
         Main.loadRules();
-        sender.sendMessage( "BungeeFilter Reloaded" );
+        sender.sendMessage(new TextComponent(  "BungeeFilter Reloaded" ));
     }
 }

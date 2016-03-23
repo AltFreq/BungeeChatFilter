@@ -2,6 +2,7 @@ package com.minecraftdimensions.bungeechatfilter;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 
@@ -61,15 +62,15 @@ public class Rule {
             if ( action.equals( "deny" ) ) {
                 event.setCancelled( true );
             } else if ( action.equals( "message" ) ) {
-                player.sendMessage( color( actions.get( action )[0] ) );
+                player.sendMessage(new TextComponent(  color( actions.get( action )[0] ) ));
             } else if ( action.equals( "kick" ) ) {
-                player.disconnect( color( actions.get( action )[0] ) );
+                player.disconnect(new TextComponent(  color( actions.get( action )[0] ) ));
             } else if ( action.equals( "alert" ) ) {
                 String alert =   actions.get( action )[0].replace( "{player}", player.getDisplayName() );
                 if(message.split( " ", 2 ).length>1){
                        alert =alert.replace("{arguments}", message.split( " ", 2 )[1] )    ;
                 }
-                ProxyServer.getInstance().broadcast( color( alert ));
+                ProxyServer.getInstance().broadcast(new TextComponent(  color( alert )));
             } else if ( action.equals( "scommand" ) ) {
                 player.chat( actions.get( action )[0] );
             } else if ( action.equals( "pcommand" ) ) {
