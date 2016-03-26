@@ -80,6 +80,7 @@ public class PlayerChatListener implements Listener {
     public void playerLogOut( PlayerDisconnectEvent e ) {
           if(Main.ANTISPAM.containsKey( e.getPlayer().getName() )){
               Main.ANTISPAM.remove( e.getPlayer().getName() );
+              Main.ANTIREPEAT.remove( e.getPlayer().getName() );
           }
     }
 
