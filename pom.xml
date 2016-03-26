@@ -6,7 +6,7 @@
 
     <groupId>BungeeChatFilter</groupId>
     <artifactId>BungeeChatFilter</artifactId>
-    <version>1.6-SNAPSHOT</version>
+    <version>1.6.1</version>
     <packaging>jar</packaging>
 
     <name>BungeeChatFilter</name>
@@ -40,7 +40,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>${project.name}</finalName>
+        <finalName>${project.name}-${project.version}</finalName>
         <resources>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
