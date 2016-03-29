@@ -12,6 +12,7 @@ import java.util.List;
 public class Main extends Plugin {
 
     public static long SPAMTIMER = 0;
+    public static long REPEATTIMER = 0;
     public static Boolean COMMANDS;
     public static List<String> COMLIST;
     public static ArrayList<Rule> RULES;
@@ -69,7 +70,8 @@ public class Main extends Plugin {
         COMLIST = c.getListString( "Commands", defaultList );
         NOSPAM = c.getBoolean( "AntiSpam", true );
         NOREPEAT = c.getBoolean( "AntiRepeat", true );
-        SPAMTIMER = c.getInt( "Minimum-Chat-Delay" ) ;
+        SPAMTIMER = c.getInt( "Minimum-Chat-Delay", 1500 ) ;
+        REPEATTIMER = c.getInt( "Minimum-Repeat-Delay", 60000 ) ;
         loadRules();
     }
 
