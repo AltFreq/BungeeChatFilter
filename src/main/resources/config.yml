@@ -11,6 +11,7 @@ Monitor Commands: true
 Commands:
     - msg
     - message
+    - m
     - tell
     - whisper
     - w
@@ -19,6 +20,10 @@ Commands:
     - s
     - l
     - local
+    - hub
+    - url
+    - website
+    - warp
     - hub
 
 #AntiSpam - Will use the minimum chat delay to force players to wait *1500ms or what ever you specified between messages
