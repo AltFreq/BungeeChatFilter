@@ -6,7 +6,7 @@
 
     <groupId>BungeeChatFilter</groupId>
     <artifactId>BungeeChatFilter</artifactId>
-    <version>1.6.3-SNAPSHOT</version>
+    <version>1.6.3</version>
     <packaging>jar</packaging>
 
     <name>BungeeChatFilter</name>

@@ -23,8 +23,13 @@ Commands:
 
 #AntiSpam - Will use the minimum chat delay to force players to wait *1500ms or what ever you specified between messages
 AntiSpam: true
+AntiRepeat: true
 #Minimum-Chat-Delay - The time in miliseconds a player must wait between messages
 Minimum-Chat-Delay: 1500
+Minimum-Repeat-Delay: 60000
+#Messages sent to the player in chat when they are blocked by AntiSpam or AntiRepeat
+AntiSpamMessage: Please do not spam
+AntiRepeatMessage: Please do not spam
 
 #Rules - Groups of rules which monitor the chat
 #rules:

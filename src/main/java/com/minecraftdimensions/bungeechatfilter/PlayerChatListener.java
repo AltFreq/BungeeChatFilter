@@ -23,14 +23,14 @@ public class PlayerChatListener implements Listener {
                 if ( Main.NOSPAM && !player.hasPermission( "bungeefilter.bypass.spam" ) ) {
                     if ( spamCheck( player, e.getMessage(), System.currentTimeMillis()) ) {
                         e.setCancelled( true );
-                        player.sendMessage( new TextComponent( ChatColor.RED + "Please do not spam" ) );
+                        player.sendMessage( new TextComponent( ChatColor.RED + Main.c.getString("AntiSpamMessage", "Please do not spam") ) );
                         return;
                     }
                 }
                 if(Main.NOREPEAT && !player.hasPermission( "bungeefilter.bypass.repeat" )){
                     if(repeatCheck(player.getName(), e.getMessage(),System.currentTimeMillis())){
                         e.setCancelled( true );
-                        player.sendMessage( new TextComponent( ChatColor.RED + "Please do not spam" ) );
+                        player.sendMessage( new TextComponent( ChatColor.RED + Main.c.getString("AntiSpamMessage", "Please do not spam") ) );
                         return;
                     }else{
                         Main.ANTIREPEAT.put( player.getName(), e.getMessage() );
