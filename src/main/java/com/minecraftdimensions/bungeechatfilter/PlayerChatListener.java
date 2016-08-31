@@ -39,10 +39,10 @@ public class PlayerChatListener implements Listener {
                 for ( Rule r : Main.RULES ) {
                     if(r.hasPermission()){
                         if(!r.needsPerm && player.hasPermission( r.getPermission() )){
-                            return;
+                            continue;
                         }
                         if(r.needsPerm && !player.hasPermission( r.getPermission() )){
-                            return;
+                            continue;
                         }
                     }
                     if ( r.doesMessageContainRegex( e.getMessage() ) ) {
