@@ -17,6 +17,8 @@ public class PlayerChatListener implements Listener {
             if ( !player.hasPermission( "bungeefilter.bypass" ) ) {
                 if ( !Main.COMMANDS && isChatCommand( e.getMessage() ) ) {
                     return;
+                } else if( Main.COMMANDS && isChatCommand( e.getMessage() ) && !isMonitoredCommand( e.getMessage() )){
+                    return;
                 }
                 if ( Main.NOSPAM && !player.hasPermission( "bungeefilter.bypass.spam" ) ) {
                     if ( spamCheck( player, e.getMessage(), System.currentTimeMillis()) ) {
@@ -55,9 +57,6 @@ public class PlayerChatListener implements Listener {
     }
 
     private boolean spamCheck( ProxiedPlayer player,String message, long time ) {
-        if(isChatCommand( message ) && !isMonitoredCommand( message )){
-            return false;
-        }
         if ( Main.ANTISPAM.containsKey( player.getName() ) ) {
             Long diff = time-Main.ANTISPAM.get( player.getName() );
             return diff<Main.SPAMTIMER;
@@ -66,9 +65,6 @@ public class PlayerChatListener implements Listener {
     }
     
     private boolean repeatCheck( String name, String message, long time ) {
-        if(isChatCommand( message ) && !isMonitoredCommand( message )){
-            return false;
-        }
         if ( Main.ANTISPAM.containsKey( name) && Main.ANTIREPEAT.containsKey( name ) ) {
             Long diff = time-Main.ANTISPAM.get( name );
             if ( diff<Main.REPEATTIMER ) {
