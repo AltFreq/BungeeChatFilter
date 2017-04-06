@@ -47,15 +47,14 @@ AntiRepeatMessage: Please do not spam
 #           message: (message)      -this will send a message (message) to the player
 #           kick: (message)     - this will kick the player with the (message)
 #           alert: (message)        - this will send a broadcast to the server {player} will be replaced with the players display name
-#           command: /(command)     - this will cause the player to send the (command)
 #           remove: true        - this will remove any matches from the players message
 #           replace:              - this will replace the matched word with a random word from the list below
 #               - word1
 #               - word2
 #           lower:            - this will change any matches into lowercase
-#          pcommand: /(command)    - Proxy command, this will cause the player to send the (command) to the proxy server
-#          scommand: /(command)    - Server command this will cause the player to send the (command) to their current server
-#          ccommand: /(command)    - Console command, this will cause the proxy server console to execute the (command).
+#          pcommand: (command)    - Proxy command, this will cause the player to send the (command) to the proxy server. Do not include a /.
+#          scommand: /(command)    - Server command this will cause the player to send the (command) to their current server. You must include a /.
+#          ccommand: (command)    - Console command, this will cause the proxy server console to execute the (command). Do not include a /.
 #                                      Note that there is currently no way to execute a command as the current server console.
 
 
