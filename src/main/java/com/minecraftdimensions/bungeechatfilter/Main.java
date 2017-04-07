@@ -106,7 +106,7 @@ public class Main extends Plugin {
     }
 
 
-    public String color( String s ) {
+    public static String color( String s ) {
         return ChatColor.translateAlternateColorCodes( '&', s );
     }
 }

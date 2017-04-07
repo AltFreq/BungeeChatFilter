@@ -33,8 +33,8 @@ AntiRepeat: true
 Minimum-Chat-Delay: 1500
 Minimum-Repeat-Delay: 60000
 #Messages sent to the player in chat when they are blocked by AntiSpam or AntiRepeat
-AntiSpamMessage: Please do not spam
-AntiRepeatMessage: Please do not spam
+AntiSpamMessage: &cPlease do not spam
+AntiRepeatMessage: &cPlease do not spam
 
 #Rules - Groups of rules which monitor the chat
 #rules:

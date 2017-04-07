@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public class Rule {
 
@@ -62,15 +63,15 @@ public class Rule {
             if ( action.equals( "deny" ) ) {
                 event.setCancelled( true );
             } else if ( action.equals( "message" ) ) {
-                player.sendMessage(new TextComponent(  color( actions.get( action )[0] ) ));
+                player.sendMessage( TextComponent.fromLegacyText( Main.color( actions.get( action )[0] ) ) );
             } else if ( action.equals( "kick" ) ) {
-                player.disconnect(new TextComponent(  color( actions.get( action )[0] ) ));
+                player.disconnect( new TextComponent( TextComponent.fromLegacyText( Main.color( actions.get( action )[0] ) ) ) );
             } else if ( action.equals( "alert" ) ) {
                 String alert =   actions.get( action )[0].replace( "{player}", player.getDisplayName() );
                 if(message.split( " ", 2 ).length>1){
                        alert =alert.replace("{arguments}", message.split( " ", 2 )[1] )    ;
                 }
-                ProxyServer.getInstance().broadcast(new TextComponent(  color( alert )));
+                ProxyServer.getInstance().broadcast(new TextComponent(  Main.color( alert )));
             } else if ( action.equals( "scommand" ) ) {
                 player.chat( actions.get( action )[0] );
             } else if ( action.equals( "pcommand" ) ) {
@@ -106,10 +107,6 @@ public class Rule {
             }
         }
         event.setMessage( message );
-    }
-
-    public String color( String s ) {
-        return ChatColor.translateAlternateColorCodes( '&', s );
     }
 
     public boolean hasPermission() {
