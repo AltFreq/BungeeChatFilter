@@ -16,11 +16,11 @@ public class Rule {
 
     Pattern regex;
     Pattern ignore;
-    HashMap<String, String[]> actions;
+    HashMap<String, Object[]> actions;
     String permission = null;
     boolean needsPerm;
 
-    public Rule( String regex, HashMap<String, String[]> actions, String permission, String ignores ) {
+    public Rule( String regex, HashMap<String, Object[]> actions, String permission, String ignores ) {
         this.regex = Pattern.compile( regex );
         if ( ignores == null ) {
             ignore = null;
@@ -60,24 +60,24 @@ public class Rule {
             }
         }
         for ( String action : actions.keySet() ) {
-            if ( action.equals( "deny" ) ) {
+            if ( action.equals( "deny" ) && (Boolean) actions.get( action )[0] ) {
                 event.setCancelled( true );
             } else if ( action.equals( "message" ) ) {
-                player.sendMessage( TextComponent.fromLegacyText( Main.color( actions.get( action )[0] ) ) );
+                player.sendMessage( TextComponent.fromLegacyText( Main.color((String) actions.get( action )[0]) ) );
             } else if ( action.equals( "kick" ) ) {
-                player.disconnect( new TextComponent( TextComponent.fromLegacyText( Main.color( actions.get( action )[0] ) ) ) );
+                player.disconnect( new TextComponent( TextComponent.fromLegacyText( Main.color((String) actions.get( action )[0]) ) ) );
             } else if ( action.equals( "alert" ) ) {
-                String alert =   actions.get( action )[0].replace( "{player}", player.getDisplayName() );
+                String alert =   ((String) actions.get( action )[0]).replace( "{player}", player.getDisplayName() );
                 if(message.split( " ", 2 ).length>1){
                        alert =alert.replace("{arguments}", message.split( " ", 2 )[1] )    ;
                 }
                 ProxyServer.getInstance().broadcast(new TextComponent(  Main.color( alert )));
             } else if ( action.equals( "scommand" ) ) {
-                player.chat( actions.get( action )[0] );
+                player.chat((String) actions.get( action )[0]);
             } else if ( action.equals( "pcommand" ) ) {
-                ProxyServer.getInstance().getPluginManager().dispatchCommand( player, actions.get( action )[0] );
+                ProxyServer.getInstance().getPluginManager().dispatchCommand(player, (String) actions.get( action )[0]);
             } else if( action.equals( "ccommand" )){
-                ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), actions.get( action )[0].replace( "{player}", player.getName() ).replace( "{message}", message ) );
+                ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), ((String) actions.get( action )[0]).replace( "{player}", player.getName() ).replace( "{message}", message ) );
             } else if ( action.equals( "remove" ) ) {
                 message = message.replaceAll( regex.pattern(), "" );
             } else if ( action.equals( "replace" ) ) {
@@ -88,7 +88,7 @@ public class Rule {
                 while ( m.find() ) {
                         int n = rand.nextInt( actions.get( action ).length );
                         sb.append( message.substring( last, m.start() ) );
-                        sb.append( actions.get( action )[n] );
+                        sb.append( (String) actions.get( action )[n] );
                         last = m.end();
                 }
                 sb.append( message.substring( last ) );

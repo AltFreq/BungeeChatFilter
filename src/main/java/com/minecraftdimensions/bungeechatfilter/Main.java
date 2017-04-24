@@ -91,13 +91,13 @@ public class Main extends Plugin {
             }
             String perm = c.getString( "rules." + node + ".permission" );
             String ignore = c.getString( "rules." + node + ".ignores" );
-            HashMap<String, String[]> actions = new HashMap<>();
+            HashMap<String, Object[]> actions = new HashMap<>();
             for ( String action : c.getSubNodes( "rules." + node + ".actions" ) ) {
                 if ( action.equals( "replace" ) ) {
                     List<String> strlist = c.getListString( "rules." + node + ".actions.replace" );
                     actions.put( action, strlist.toArray( new String[strlist.size()] ) );
                 } else {
-                    actions.put( action, new String[] { c.getString( "rules." + node + ".actions." + action ) } );
+                    actions.put( action, new Object[] { c.get( "rules." + node + ".actions." + action ) } );
                 }
             }
             RULES.add( new Rule( regex, actions, perm, ignore ) );

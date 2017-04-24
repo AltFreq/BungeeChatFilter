@@ -49,6 +49,15 @@ public class Config {
             }
         }
     }
+    
+    public Object get( String key ) {
+
+        if ( fconfig.contains( key ) ) {
+            return fconfig.get( key );
+        } else{
+            return null;
+        }
+    }
 
     public String getString( String key, String def ) {
 
