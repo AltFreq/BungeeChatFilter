@@ -1,7 +1,7 @@
 ##########################################
 ##                                      ##
 ##      Bungee Chat Filter Config       ##
-##               v1.2                   ##
+##                 v1.7                 ##
 ##########################################
 
 #Monitor commands - Monitor commands send by the players as chat
@@ -38,25 +38,31 @@ AntiRepeatMessage: &cPlease do not spam
 
 #Rules - Groups of rules which monitor the chat
 #rules:
-#   rulename:  - the name of the rule
-#       regex:  - the string regex that the rule will check for
-#       ignores:  - If the message contains a value that matches ignore then none of the actions will be performed
-#       permission: - the permission required to bypass this rule
-#       actions: - here is the list of actions the rule will perform if matched
-#           deny: true      - this will deny the message and cancel the event
-#           message: (message)      -this will send a message (message) to the player
-#           kick: (message)     - this will kick the player with the (message)
-#           alert: (message)        - this will send a broadcast to the server {player} will be replaced with the players display name
-#           remove: true        - this will remove any matches from the players message
-#           replace:              - this will replace the matched word with a random word from the list below
+#   rulename:                       - the name of the rule.
+#       regex:                      - the string regex that the rule will check for.
+#       ignores:                    - If the message contains a value that matches ignore then none of the actions will be performed.
+#       permission:                 - the permission required to bypass this rule.
+#       actions:                    - here is the list of actions the rule will perform if matched.
+#           deny: true              - this will deny the message and cancel the event.
+#           message: <message>      - this will send a message <message to the player. (Supports Placeholders, see below)
+#           kick: <message>         - this will kick the player with the <message>. (Supports Placeholders, see below)
+#           alert: <message>        - this will send the <message> to all players connected to the proxy server. (Supports Placeholders, see below)
+#           remove: true            - this will remove any matches from the player's message.
+#           replace:                - this will replace the matched word with a random word from the list below. (Supports Placeholders, see below)
 #               - word1
 #               - word2
-#           lower:            - this will change any matches into lowercase
-#          pcommand: (command)    - Proxy command, this will cause the player to send the (command) to the proxy server. Do not include a /.
-#          scommand: /(command)    - Server command this will cause the player to send the (command) to their current server. You must include a /.
-#          ccommand: (command)    - Console command, this will cause the proxy server console to execute the (command). Do not include a /.
+#           lower: true             - this will change any matches into lowercase.
+#           pcommand: (command)     - Proxy command, this will cause the player to send the (command) to the proxy server. Do not include a /. (Supports Placeholders, see below)
+#           scommand: /(command)    - Server command this will cause the player to send the (command) to their current server. You must include a /. (Supports Placeholders, see below)
+#           ccommand: (command)     - Console command, this will cause the proxy server console to execute the (command). Do not include a /. (Supports Placeholders, see below)
 #                                      Note that there is currently no way to execute a command as the current server console.
 
+#Placeholders                       - These placeholders can be used in any action strings.
+#
+# {player}                          - Replaced with the display name of the player sending the message
+# {message}                         - Replaced with the original message as sent by the player
+# {arguments}                       - Intended for use with commands, this will be replaced by all of the arguments following the first word of the player's message.
+#                                       (for example a player sending "/send Zedwick Hello!" will return "Zedwick Hello!" in place of {arguments})
 
 rules:
 
@@ -164,7 +170,10 @@ rules:
         regex: /broadcast
         permission: "!bungeefilter.broadcast"
         actions:
-            alert: '&5[Broadcast]&a{player}&f:{arguments}'
+            alert:
+            - ''
+            - '&5[Broadcast] &a{player}&f: {arguments}'
+            - ''
             deny: true
 
 #Shortcut for website URL can use either /url or /website
