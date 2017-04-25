@@ -20,11 +20,11 @@ Commands:
     - s
     - l
     - local
-    - hub
     - url
     - website
-    - warp
     - hub
+    - shop
+    - broadcast
 
 #AntiSpam - Will use the minimum chat delay to force players to wait *1500ms or what ever you specified between messages
 AntiSpam: true
