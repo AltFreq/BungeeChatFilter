@@ -91,13 +91,20 @@ public class Main extends Plugin {
             }
             String perm = c.getString( "rules." + node + ".permission" );
             String ignore = c.getString( "rules." + node + ".ignores" );
-            HashMap<String, Object[]> actions = new HashMap<>();
+            HashMap<String, Object> actions = new HashMap<>();
             for ( String action : c.getSubNodes( "rules." + node + ".actions" ) ) {
+                Object obj = c.get( "rules." + node + ".actions." + action );
                 if ( action.equals( "replace" ) ) {
                     List<String> strlist = c.getListString( "rules." + node + ".actions.replace" );
                     actions.put( action, strlist.toArray( new String[strlist.size()] ) );
+                } else if ( obj instanceof List ) {
+                    actions.put( action, c.getListString("rules." + node + ".actions." + action ) );
+                } else if ( obj instanceof String ) {
+                    List<String> stringList = new ArrayList();
+                    stringList.add( c.getString("rules." + node + ".actions." + action ) );
+                    actions.put( action, stringList );
                 } else {
-                    actions.put( action, new Object[] { c.get( "rules." + node + ".actions." + action ) } );
+                    actions.put( action, c.get( "rules." + node + ".actions." + action ) );
                 }
             }
             RULES.add( new Rule( regex, actions, perm, ignore ) );
@@ -106,7 +113,4 @@ public class Main extends Plugin {
     }
 
 
-    public static String color( String s ) {
-        return ChatColor.translateAlternateColorCodes( '&', s );
-    }
 }
