@@ -22,11 +22,11 @@ public class Rule {
     boolean needsPerm;
 
     public Rule( String regex, HashMap<String, Object> actions, String permission, String ignores ) {
-        this.regex = Pattern.compile( regex );
+        this.regex = Pattern.compile( regex , Pattern.UNICODE_CHARACTER_CLASS);
         if ( ignores == null ) {
             ignore = null;
         }    else{
-        this.ignore = Pattern.compile( ignores );
+        this.ignore = Pattern.compile( ignores , Pattern.UNICODE_CHARACTER_CLASS);
         }
         this.actions = actions;
         if(permission!=null && permission.startsWith( "!" )){
