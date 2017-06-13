@@ -9,6 +9,7 @@ import net.md_5.bungee.api.event.ChatEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -88,11 +89,14 @@ public class Rule {
                 Matcher m = getMatcher( message );
                 StringBuilder sb = new StringBuilder();
                 int last = 0;
-                while ( m.find() ) {
-                        int n = rand.nextInt( ((String[]) actions.get( action )).length );
-                        sb.append( message.substring( last, m.start() ) );
-                        sb.append( util.ParseVariables(((String[]) actions.get( action ))[n], event) );
-                        last = m.end();
+                String[] replacements = (String[]) actions.get( action );
+                if ( replacements.length > 0 ){
+                    while ( m.find() ) {
+                            int n = rand.nextInt( replacements.length );
+                            sb.append( message.substring( last, m.start() ) );
+                            sb.append( util.ParseVariables(((String[]) actions.get( action ))[n], event) );
+                            last = m.end();
+                    }
                 }
                 sb.append( message.substring( last ) );
                 message = sb.toString();
