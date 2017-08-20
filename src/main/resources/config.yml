@@ -87,8 +87,7 @@ rules:
             - queer
             - bitch
             - bastard
-            - dick
-            - gay)
+            - dick)
         actions:
             replace:
                 - lovely
