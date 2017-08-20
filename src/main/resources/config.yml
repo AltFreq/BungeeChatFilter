@@ -155,7 +155,7 @@ rules:
     CommandShortcut:
         regex: /hub
         actions:
-            pcommand: /server hub
+            pcommand: server hub
             deny: true
 
 #When a player uses the command /shop they will instead send a command to the server they are on /warp shop.
