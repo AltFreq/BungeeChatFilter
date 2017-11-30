@@ -30,7 +30,7 @@ public class PlayerChatListener implements Listener {
                 if(Main.NOREPEAT && !player.hasPermission( "bungeefilter.bypass.repeat" )){
                     if(repeatCheck(player.getName(), e.getMessage(),System.currentTimeMillis())){
                         e.setCancelled( true );
-                        player.sendMessage( new TextComponent( TextComponent.fromLegacyText(util.color( Main.c.getString("AntiSpamMessage", "&cPlease do not spam") ) ) ) );
+                        player.sendMessage( new TextComponent( TextComponent.fromLegacyText(util.color( Main.c.getString("AntiRepeatMessage", "&cPlease do not spam") ) ) ) );
                         return;
                     }else{
                         Main.ANTIREPEAT.put( player.getName(), e.getMessage() );
