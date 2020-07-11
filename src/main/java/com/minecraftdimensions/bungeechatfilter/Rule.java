@@ -2,28 +2,32 @@ package com.minecraftdimensions.bungeechatfilter;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public class Rule {
 
     Pattern regex;
     Pattern ignore;
-    HashMap<String, String[]> actions;
+    HashMap<String, Object> actions;
     String permission = null;
     boolean needsPerm;
 
-    public Rule( String regex, HashMap<String, String[]> actions, String permission, String ignores ) {
-        this.regex = Pattern.compile( regex );
+    public Rule( String regex, HashMap<String, Object> actions, String permission, String ignores ) {
+        this.regex = Pattern.compile( regex , Pattern.UNICODE_CHARACTER_CLASS);
         if ( ignores == null ) {
             ignore = null;
         }    else{
-        this.ignore = Pattern.compile( ignores );
+        this.ignore = Pattern.compile( ignores , Pattern.UNICODE_CHARACTER_CLASS);
         }
         this.actions = actions;
         if(permission!=null && permission.startsWith( "!" )){
@@ -58,40 +62,45 @@ public class Rule {
             }
         }
         for ( String action : actions.keySet() ) {
-            if ( action.equals( "deny" ) ) {
+            if ( action.equals( "deny" ) && (Boolean) actions.get( action ) ) {
                 event.setCancelled( true );
             } else if ( action.equals( "message" ) ) {
-                player.sendMessage( color( actions.get( action )[0] ) );
+                player.sendMessage( util.MessageFromStringList( (List<String>) actions.get( action ), event ) );
             } else if ( action.equals( "kick" ) ) {
-                player.disconnect( color( actions.get( action )[0] ) );
+                player.disconnect( util.MessageFromStringList( (List<String>) actions.get( action ), event ) );
             } else if ( action.equals( "alert" ) ) {
-                String alert =   actions.get( action )[0].replace( "{player}", player.getDisplayName() );
-                if(message.split( " ", 2 ).length>1){
-                       alert =alert.replace("{arguments}", message.split( " ", 2 )[1] )    ;
-                }
-                ProxyServer.getInstance().broadcast( color( alert ));
+                ProxyServer.getInstance().broadcast( util.MessageFromStringList( (List<String>) actions.get( action ), event ) );
             } else if ( action.equals( "scommand" ) ) {
-                player.chat( actions.get( action )[0] );
+                for ( String scommand : (List<String>) actions.get( action ) ) {
+                    player.chat( util.ParseVariables( scommand, event ) );
+                }
             } else if ( action.equals( "pcommand" ) ) {
-                ProxyServer.getInstance().getPluginManager().dispatchCommand( player, actions.get( action )[0] );
-            } else if( action.equals( "ccommand" )){
-                ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), actions.get( action )[0].replace( "{player}", player.getName() ) );
-            } else if ( action.equals( "remove" ) ) {
+                for ( String pcommand : (List<String>) actions.get( action ) ) {
+                    ProxyServer.getInstance().getPluginManager().dispatchCommand(player, util.ParseVariables(pcommand, event) );
+                }
+            } else if( action.equals( "ccommand" ) ) {
+                for ( String ccommand : (List<String>) actions.get( action ) ) {
+                    ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), util.ParseVariables(ccommand, event) );
+                }
+            } else if ( action.equals( "remove" ) && (Boolean) actions.get( action ) ) {
                 message = message.replaceAll( regex.pattern(), "" );
             } else if ( action.equals( "replace" ) ) {
                 Random rand = new Random();
                 Matcher m = getMatcher( message );
                 StringBuilder sb = new StringBuilder();
                 int last = 0;
-                while ( m.find() ) {
-                        int n = rand.nextInt( actions.get( action ).length );
-                        sb.append( message.substring( last, m.start() ) );
-                        sb.append( actions.get( action )[n] );
-                        last = m.end();
+                String[] replacements = (String[]) actions.get( action );
+                if ( replacements.length > 0 ){
+                    while ( m.find() ) {
+                            int n = rand.nextInt( replacements.length );
+                            sb.append( message.substring( last, m.start() ) );
+                            sb.append( util.ParseVariables(((String[]) actions.get( action ))[n], event) );
+                            last = m.end();
+                    }
                 }
                 sb.append( message.substring( last ) );
                 message = sb.toString();
-            } else if ( action.equals( "lower" ) ) {
+            } else if ( action.equals( "lower" ) && (Boolean) actions.get( action ) ) {
                 Matcher m = getMatcher( message );
                 StringBuilder sb = new StringBuilder();
                 int last = 0;
@@ -105,10 +114,6 @@ public class Rule {
             }
         }
         event.setMessage( message );
-    }
-
-    public String color( String s ) {
-        return ChatColor.translateAlternateColorCodes( '&', s );
     }
 
     public boolean hasPermission() {

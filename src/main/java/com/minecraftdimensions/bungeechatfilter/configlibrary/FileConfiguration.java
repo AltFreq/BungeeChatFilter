@@ -1,6 +1,7 @@
 package com.minecraftdimensions.bungeechatfilter.configlibrary;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public abstract class FileConfiguration extends MemoryConfiguration {
     public FileConfiguration() {
@@ -38,7 +39,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
 
     public void load( InputStream stream ) throws IOException, InvalidConfigurationException {
 
-        InputStreamReader reader = new InputStreamReader( stream );
+        InputStreamReader reader = new InputStreamReader( stream , StandardCharsets.UTF_8 );
         StringBuilder builder = new StringBuilder();
         BufferedReader input = new BufferedReader( reader );
 

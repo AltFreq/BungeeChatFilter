@@ -17,33 +17,34 @@ public class PlayerChatListener implements Listener {
             if ( !player.hasPermission( "bungeefilter.bypass" ) ) {
                 if ( !Main.COMMANDS && isChatCommand( e.getMessage() ) ) {
                     return;
+                } else if( Main.COMMANDS && isChatCommand( e.getMessage() ) && !isMonitoredCommand( e.getMessage() )){
+                    return;
                 }
-                if(Main.NOREPEAT){
-                    if(repeatCheck(player.getName(), e.getMessage())){
+                if ( Main.NOSPAM && !player.hasPermission( "bungeefilter.bypass.spam" ) ) {
+                    if ( spamCheck( player, e.getMessage(), System.currentTimeMillis()) ) {
                         e.setCancelled( true );
-                        player.sendMessage( new TextComponent( ChatColor.RED + "Please do not spam" ) );
+                        player.sendMessage( new TextComponent( TextComponent.fromLegacyText(util.color( Main.c.getString("AntiSpamMessage", "&cPlease do not spam") ) ) ) );
+                        return;
+                    }
+                }
+                if(Main.NOREPEAT && !player.hasPermission( "bungeefilter.bypass.repeat" )){
+                    if(repeatCheck(player.getName(), e.getMessage(),System.currentTimeMillis())){
+                        e.setCancelled( true );
+                        player.sendMessage( new TextComponent( TextComponent.fromLegacyText(util.color( Main.c.getString("AntiRepeatMessage", "&cPlease do not spam") ) ) ) );
                         return;
                     }else{
                         Main.ANTIREPEAT.put( player.getName(), e.getMessage() );
                     }
 
                 }
-                if ( Main.NOSPAM ) {
-                    if ( spamCheck( player, e.getMessage(), System.currentTimeMillis()) ) {
-                        e.setCancelled( true );
-                        player.sendMessage( new TextComponent( ChatColor.RED + "Please do not spam" ) );
-                        return;
-                    } else {
-                        Main.ANTISPAM.put( player.getName(),System.currentTimeMillis());
-                    }
-                }
+                Main.ANTISPAM.put( player.getName(),System.currentTimeMillis());
                 for ( Rule r : Main.RULES ) {
                     if(r.hasPermission()){
                         if(!r.needsPerm && player.hasPermission( r.getPermission() )){
-                            return;
+                            continue;
                         }
                         if(r.needsPerm && !player.hasPermission( r.getPermission() )){
-                            return;
+                            continue;
                         }
                     }
                     if ( r.doesMessageContainRegex( e.getMessage() ) ) {
@@ -55,23 +56,22 @@ public class PlayerChatListener implements Listener {
 
     }
 
-    private boolean repeatCheck( String name, String message ) {
-        if(isChatCommand( message ) && !isMonitoredCommand( message )){
-            return false;
-        }
-        if ( Main.ANTIREPEAT.containsKey( name ) ) {
-            return Main.ANTIREPEAT.get( name ).equals( message );
-        }
-        return false;
-    }
-
     private boolean spamCheck( ProxiedPlayer player,String message, long time ) {
-        if(isChatCommand( message ) && !isMonitoredCommand( message )){
-            return false;
-        }
         if ( Main.ANTISPAM.containsKey( player.getName() ) ) {
             Long diff = time-Main.ANTISPAM.get( player.getName() );
             return diff<Main.SPAMTIMER;
+        }
+        return false;
+    }
+    
+    private boolean repeatCheck( String name, String message, long time ) {
+        if ( Main.ANTISPAM.containsKey( name) && Main.ANTIREPEAT.containsKey( name ) ) {
+            Long diff = time-Main.ANTISPAM.get( name );
+            if ( diff<Main.REPEATTIMER ) {
+                return Main.ANTIREPEAT.get( name ).equals( message );
+            } else {
+                return false;
+            }
         }
         return false;
     }
@@ -80,6 +80,7 @@ public class PlayerChatListener implements Listener {
     public void playerLogOut( PlayerDisconnectEvent e ) {
           if(Main.ANTISPAM.containsKey( e.getPlayer().getName() )){
               Main.ANTISPAM.remove( e.getPlayer().getName() );
+              Main.ANTIREPEAT.remove( e.getPlayer().getName() );
           }
     }
 

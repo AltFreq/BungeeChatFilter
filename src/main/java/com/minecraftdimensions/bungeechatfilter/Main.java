@@ -12,6 +12,7 @@ import java.util.List;
 public class Main extends Plugin {
 
     public static long SPAMTIMER = 0;
+    public static long REPEATTIMER = 0;
     public static Boolean COMMANDS;
     public static List<String> COMLIST;
     public static ArrayList<Rule> RULES;
@@ -69,7 +70,8 @@ public class Main extends Plugin {
         COMLIST = c.getListString( "Commands", defaultList );
         NOSPAM = c.getBoolean( "AntiSpam", true );
         NOREPEAT = c.getBoolean( "AntiRepeat", true );
-        SPAMTIMER = c.getInt( "Minimum-Chat-Delay" ) ;
+        SPAMTIMER = c.getInt( "Minimum-Chat-Delay", 1500 ) ;
+        REPEATTIMER = c.getInt( "Minimum-Repeat-Delay", 60000 ) ;
         loadRules();
     }
 
@@ -89,13 +91,20 @@ public class Main extends Plugin {
             }
             String perm = c.getString( "rules." + node + ".permission" );
             String ignore = c.getString( "rules." + node + ".ignores" );
-            HashMap<String, String[]> actions = new HashMap<>();
+            HashMap<String, Object> actions = new HashMap<>();
             for ( String action : c.getSubNodes( "rules." + node + ".actions" ) ) {
+                Object obj = c.get( "rules." + node + ".actions." + action );
                 if ( action.equals( "replace" ) ) {
                     List<String> strlist = c.getListString( "rules." + node + ".actions.replace" );
                     actions.put( action, strlist.toArray( new String[strlist.size()] ) );
+                } else if ( obj instanceof List ) {
+                    actions.put( action, c.getListString("rules." + node + ".actions." + action ) );
+                } else if ( obj instanceof String ) {
+                    List<String> stringList = new ArrayList();
+                    stringList.add( c.getString("rules." + node + ".actions." + action ) );
+                    actions.put( action, stringList );
                 } else {
-                    actions.put( action, new String[] { c.getString( "rules." + node + ".actions." + action ) } );
+                    actions.put( action, c.get( "rules." + node + ".actions." + action ) );
                 }
             }
             RULES.add( new Rule( regex, actions, perm, ignore ) );
@@ -104,7 +113,4 @@ public class Main extends Plugin {
     }
 
 
-    public String color( String s ) {
-        return ChatColor.translateAlternateColorCodes( '&', s );
-    }
 }
